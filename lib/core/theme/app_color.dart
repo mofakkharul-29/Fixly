@@ -15,6 +15,7 @@ class AppColor {
     70,
   );
 
+  static const Color kSplashTextColor = Color(0xFFF0F0F0);
   static const kWhite = Color(0xFFFFFFFF);
 
   static const kCard = Color(0xFFEDEEF3);

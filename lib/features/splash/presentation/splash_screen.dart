@@ -1,4 +1,5 @@
 import 'package:fixly/core/theme/app_color.dart';
+import 'package:fixly/core/utils/custom_text_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
+  late Animation<double> _textFadeAnimation;
+  late Animation<Offset> _textSlideAnimation;
 
   @override
   void initState() {
@@ -48,6 +51,33 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               0.0,
               0.5,
               curve: Curves.easeIn,
+            ),
+          ),
+        );
+
+    _textFadeAnimation = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(
+              0.5,
+              1.0,
+              curve: Curves.easeIn,
+            ),
+          ),
+        );
+
+    _textSlideAnimation =
+        Tween<Offset>(
+          begin: const Offset(0, 0.4),
+          end: Offset.zero,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(
+              0.5,
+              1.0,
+              curve: Curves.easeOut,
             ),
           ),
         );
@@ -86,17 +116,38 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         height: mediaSize.height,
         width: double.infinity,
         child: Center(
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: Image.asset(
-                'assets/images/logo.png',
-                width: mediaSize.width * 0.30,
-                height: mediaSize.width * 0.30,
-                fit: BoxFit.contain,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FadeTransition(
+                opacity: _fadeAnimation,
+                child: ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    width: mediaSize.width * 0.30,
+                    height: mediaSize.width * 0.30,
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-            ),
+
+              const SizedBox(height: 10),
+
+              FadeTransition(
+                opacity: _textFadeAnimation,
+                child: SlideTransition(
+                  position: _textSlideAnimation,
+                  child: CustomTextFormat(
+                    text: 'Fixly',
+                    fontSize: mediaSize.width * 0.07,
+                    fontWeight: FontWeight.w800,
+                    color: AppColor.kSplashTextColor,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
