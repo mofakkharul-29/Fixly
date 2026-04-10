@@ -19,6 +19,7 @@ class AppColor {
   static const kWhite = Color(0xFFFFFFFF);
 
   static const kCard = Color(0xFFEDEEF3);
+  static const kElevatedButtonBgColor = Color(0xFFE9B312);
 
   // 🟩 Status Colors (left border in tasks)
   static const kGreen = Color(0xFF4CAF50);
