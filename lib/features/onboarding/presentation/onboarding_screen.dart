@@ -2,22 +2,24 @@ import 'package:fixly/core/theme/app_color.dart';
 import 'package:fixly/core/utils/custom_elevated_button.dart';
 import 'package:fixly/core/utils/onboarding_page.dart';
 import 'package:fixly/features/onboarding/data/onboarding_data.dart';
+import 'package:fixly/features/onboarding/model/onboarding_pages.dart';
 import 'package:fixly/features/onboarding/widget/page_indicator.dart';
 import 'package:fixly/features/onboarding/widget/skip_button.dart';
+import 'package:fixly/features/provider/page_repo_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OnboardingScreen extends StatefulWidget {
+class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() =>
+  ConsumerState<OnboardingScreen> createState() =>
       _OnboardingScreenState();
 }
 
 class _OnboardingScreenState
-    extends State<OnboardingScreen> {
+    extends ConsumerState<OnboardingScreen> {
   final PageController _controller = PageController();
-
   @override
   void dispose() {
     _controller.dispose();
@@ -26,7 +28,8 @@ class _OnboardingScreenState
 
   @override
   Widget build(BuildContext context) {
-    final pages = onboardingPages;
+    final List<OnboardingPages> pages = onboardingPages;
+    final currentPage = ref.watch(pageRepoNotifierProvider);
 
     return Scaffold(
       backgroundColor: AppColor.kAppBarBackground,
@@ -45,43 +48,71 @@ class _OnboardingScreenState
                       );
                     },
                     onPageChanged: (value) {
-                      _controller.animateToPage(
-                        value,
-                        duration: const Duration(
-                          milliseconds: 300,
-                        ),
-                        curve: Curves.ease,
-                      );
+                      ref
+                          .read(
+                            pageRepoNotifierProvider
+                                .notifier,
+                          )
+                          .onPageChange(value);
                     },
                   ),
                 ),
                 const SizedBox(height: 10),
-                const PageIndicator(),
+                PageIndicator(
+                  currentPage: currentPage,
+                ),
                 const SizedBox(height: 10),
                 CustomElevatedButton(
-                  onPressed: () {},
-                  text: 'Get Started',
+                  onPressed: currentPage < pages.length - 1
+                      ? () {
+                          customAnimateTo(
+                            page: currentPage + 1,
+                          );
+                        }
+                      : () {},
+                  text: currentPage < pages.length - 1
+                      ? 'Next'
+                      : 'Get Started',
                   icon: Icons.arrow_right_alt,
                   foregroundColor: AppColor.kTextPrimary,
                   backgroundColor:
-                      AppColor.kElevatedButtonBgColor,
+                      currentPage < pages.length - 1
+                      ? AppColor.kTextSecondary
+                      : AppColor.kElevatedButtonBgColor,
                   width:
                       MediaQuery.of(context).size.width *
                       0.92,
                 ),
               ],
             ),
-            Positioned(
-              top: 1.0,
-              right: 16.0,
-              child: SkipButton(
-                text: 'Skip',
-                onPressed: () {},
-              ),
-            ),
+            currentPage < pages.length - 1
+                ? Positioned(
+                    top: 1.0,
+                    right: 16.0,
+                    child: SkipButton(
+                      text: 'Skip',
+                      onPressed: () {
+                        final lastPage = pages.length - 1;
+                        customAnimateTo(page: lastPage);
+                      },
+                    ),
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),
+    );
+  }
+
+  void customAnimateTo({
+    required int page,
+    int time = 300,
+    Curve curve = Curves.easeIn,
+  }) {
+    _controller.animateToPage(
+      page,
+      duration: Duration(milliseconds: time),
+      curve: curve,
     );
   }
 }

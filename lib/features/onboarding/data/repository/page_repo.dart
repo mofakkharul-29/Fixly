@@ -1,0 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class PageRepo extends Notifier<int> {
+  @override
+  int build() {
+    return 0;
+  }
+
+  void onPageChange(int value) {
+    state = value;
+    debugPrint('from notifier on page: $state');
+  }
+}
