@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class AppColor {
   static const kAppBarBackground = Color.fromARGB(
     255,
@@ -20,9 +22,14 @@ class AppColor {
 
   static const kCard = Color(0xFFEDEEF3);
   static const kElevatedButtonBgColor = Color(0xFFE9B312);
-
-  // 🟩 Status Colors (left border in tasks)
   static const kGreen = Color(0xFF4CAF50);
+  static const kIndicatorColor = Color.fromARGB(
+    210,
+    124,
+    77,
+    255,
+  );
+  static const kSkipButtonBgColor = Color(0x63AB9EF5);
 
   // ⚫ Text Colors
   static const kTextPrimary = Color(0xFF1C1C1E);

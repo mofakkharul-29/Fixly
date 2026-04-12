@@ -1,3 +1,4 @@
+import 'package:fixly/core/theme/app_color.dart';
 import 'package:fixly/features/onboarding/data/onboarding_data.dart';
 import 'package:flutter/material.dart';
 
@@ -22,8 +23,8 @@ class PageIndicator extends StatelessWidget {
           width: index == currentPage ? 25 : 15,
           decoration: BoxDecoration(
             color: index == currentPage
-                ? Colors.deepPurpleAccent
-                : const Color(0x63AB9EF5),
+                ? AppColor.kIndicatorColor
+                : AppColor.kSkipButtonBgColor,
             borderRadius: BorderRadius.circular(5),
           ),
         );

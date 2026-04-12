@@ -13,7 +13,7 @@ class SkipButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.text,
-    this.backgroundColor = const Color(0x63AB9EF5),
+    this.backgroundColor = AppColor.kSkipButtonBgColor,
     this.fontSize = 16.0,
     this.fontWeight = FontWeight.bold,
     this.color = Colors.black87,
