@@ -8,7 +8,11 @@ class OnboardingNotifier extends AsyncNotifier<bool> {
   @override
   Future<bool> build() async {
     final isOnboardingDone = await localStorage
-        .isOnboardingFinished();
-    return isOnboardingDone ?? false;
+        .isOnboardingDone();
+    return isOnboardingDone;
+  }
+
+  Future<void> setOnboardingDone() async {
+    await localStorage.setOnboardingDone();
   }
 }

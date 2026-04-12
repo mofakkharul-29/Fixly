@@ -5,6 +5,7 @@ import 'package:fixly/features/onboarding/data/onboarding_data.dart';
 import 'package:fixly/features/onboarding/model/onboarding_pages.dart';
 import 'package:fixly/features/onboarding/widget/page_indicator.dart';
 import 'package:fixly/features/onboarding/widget/skip_button.dart';
+import 'package:fixly/features/provider/onboarding_notifier_provider.dart';
 import 'package:fixly/features/provider/page_repo_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -58,9 +59,7 @@ class _OnboardingScreenState
                   ),
                 ),
                 const SizedBox(height: 10),
-                PageIndicator(
-                  currentPage: currentPage,
-                ),
+                PageIndicator(currentPage: currentPage),
                 const SizedBox(height: 10),
                 CustomElevatedButton(
                   onPressed: currentPage < pages.length - 1
@@ -69,7 +68,14 @@ class _OnboardingScreenState
                             page: currentPage + 1,
                           );
                         }
-                      : () {},
+                      : () async {
+                          await ref
+                              .read(
+                                onboardingNotifierProfiver
+                                    .notifier,
+                              )
+                              .setOnboardingDone();
+                        },
                   text: currentPage < pages.length - 1
                       ? 'Next'
                       : 'Get Started',
@@ -97,7 +103,7 @@ class _OnboardingScreenState
                       },
                     ),
                   )
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
           ],
         ),
       ),

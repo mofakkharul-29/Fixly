@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PageRepo extends Notifier<int> {
@@ -9,6 +8,5 @@ class PageRepo extends Notifier<int> {
 
   void onPageChange(int value) {
     state = value;
-    debugPrint('from notifier on page: $state');
   }
 }
