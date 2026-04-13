@@ -22,6 +22,14 @@ class AppColor {
 
   static const kCard = Color(0xFFEDEEF3);
   static const kElevatedButtonBgColor = Color(0xFFE9B312);
+  static const kLoginButtonBgColor = Color.fromARGB(
+    240,
+    68,
+    138,
+    255,
+  );
+  static const kLogRegButtonForegroundColor =
+      Color.fromARGB(179, 255, 255, 255);
   static const kGreen = Color(0xFF4CAF50);
   static const kIndicatorColor = Color.fromARGB(
     210,
