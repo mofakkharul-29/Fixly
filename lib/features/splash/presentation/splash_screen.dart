@@ -113,6 +113,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         AssetImage('assets/images/body.jpg'),
         context,
       ),
+      precacheImage(
+        AssetImage('assets/images/google.png'),
+        context,
+      ),
+      precacheImage(
+        AssetImage('assets/images/facebook.png'),
+        context,
+      ),
+      precacheImage(
+        AssetImage('assets/images/phone.png'),
+        context,
+      ),
     ]);
   }
 

@@ -17,7 +17,7 @@ class BodyContainer extends StatelessWidget {
 
         Positioned.fill(
           child: Container(
-            color: Colors.black.withAlpha(90),
+            color: Colors.black.withAlpha(40),
           ),
         ),
 
