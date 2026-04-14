@@ -91,11 +91,39 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     });
   }
 
+  Future<void> _loadApp() async {
+    await Future.wait([
+      precacheImage(
+        AssetImage('assets/images/logo.png'),
+        context,
+      ),
+      precacheImage(
+        AssetImage('assets/images/electrician.jpg'),
+        context,
+      ),
+      precacheImage(
+        AssetImage('assets/images/mechanic.jpg'),
+        context,
+      ),
+      precacheImage(
+        AssetImage('assets/images/plumber.jpg'),
+        context,
+      ),
+      precacheImage(
+        AssetImage('assets/images/body.jpg'),
+        context,
+      ),
+    ]);
+  }
+
   Future<void> _onAnimationComplete() async {
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.edgeToEdge,
     );
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.wait([
+      Future.delayed(const Duration(milliseconds: 500)),
+      _loadApp(),
+    ]);
     if (!mounted) return;
     debugPrint('Animation is completed in : ');
   }
