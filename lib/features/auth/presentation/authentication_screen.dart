@@ -30,7 +30,7 @@ class AuthenticationScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const AuthPage(isRegisterPage: true),
+                  const AuthPage(isRegisterPage: false),
                   LogRegText(
                     firstText: 'don\'t have an account? ',
                     lastText: 'Signup',
