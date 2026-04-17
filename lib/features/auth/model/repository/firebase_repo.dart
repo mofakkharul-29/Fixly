@@ -10,11 +10,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseRepo implements AuthRepo {
   final Ref ref;
+  final GoogleSignIn _googleSignIn;
 
-  FirebaseRepo(this.ref);
+  FirebaseRepo(this.ref) : _googleSignIn = GoogleSignIn();
 
   FirebaseAuth get _auth => ref.read(firebaseAuthProvider);
-  GoogleSignIn get _googleSignIn => GoogleSignIn();
   ReadWriteToFirestore get _activity =>
       ref.read(readWriteProvider);
 
@@ -85,8 +85,14 @@ class FirebaseRepo implements AuthRepo {
   }
 
   @override
-  Future<AppUser?> currentUser() {
-    throw UnimplementedError();
+  Future<AppUser?> currentUser() async {
+    final User? user = _auth.currentUser;
+    if (user == null) return null;
+
+    final AppUser? appUser = await _activity
+        .getUserFromFirestore(user.uid);
+
+    return appUser;
   }
 
   @override

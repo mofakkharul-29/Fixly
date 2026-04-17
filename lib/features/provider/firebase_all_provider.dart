@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fixly/features/auth/data/auth_notifier.dart';
+import 'package:fixly/features/auth/model/app_user.dart';
 import 'package:fixly/features/auth/model/repository/firebase_repo.dart';
 import 'package:fixly/features/auth/widget/read_write_to_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,3 +22,8 @@ final readWriteProvider = Provider(
 final firebaseRepoProvider = Provider(
   (ref) => FirebaseRepo(ref),
 );
+
+final authNotifierProvidr =
+    AsyncNotifierProvider<AuthNotifier, AppUser?>(
+      AuthNotifier.new,
+    );
