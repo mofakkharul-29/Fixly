@@ -59,8 +59,24 @@ class FirebaseRepo implements AuthRepo {
   Future<AppUser?> loginWithEmailPassword(
     String email,
     String password,
-  ) {
-    throw UnimplementedError();
+  ) async {
+    try {
+      final UserCredential credential = await _auth
+          .signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+
+      final User? firebaseUser = credential.user;
+      if (firebaseUser == null) return null;
+
+      final AppUser? appUser = await _activity
+          .getUserFromFirestore(firebaseUser.uid);
+
+      return appUser;
+    } on FirebaseAuthException catch (e) {
+      throw AppFirebaseException.fromFirebaseAuth(e);
+    }
   }
 
   @override

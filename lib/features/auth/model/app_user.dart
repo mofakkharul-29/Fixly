@@ -40,7 +40,9 @@ class AppUser {
     return AppUser(
       uid: user['uid'] as String,
       email: user['email'] as String,
-      role: user['role'] as UserRole,
+      role: UserRole.values.firstWhere(
+        (e) => e.name == user['role'],
+      ),
       name: user['name'] as String,
       photoUrl: user['photoUrl'] as String?,
       createdAt: user['createdAt'] is Timestamp
