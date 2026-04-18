@@ -1,9 +1,11 @@
 import 'package:fixly/core/utils/custom_text_field.dart';
+import 'package:fixly/core/utils/user_role.dart';
 import 'package:fixly/features/auth/data/form_notifier.dart';
 import 'package:fixly/features/auth/model/repository/form_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthPage extends StatefulWidget {
+class AuthPage extends ConsumerStatefulWidget {
   final LgoRegFormNotifier notifier;
   final LogRegFormState status;
   final bool isRegisterPage;
@@ -15,10 +17,10 @@ class AuthPage extends StatefulWidget {
   });
 
   @override
-  State<AuthPage> createState() => _AuthPageState();
+  ConsumerState<AuthPage> createState() => _AuthPageState();
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _AuthPageState extends ConsumerState<AuthPage> {
   final _key = GlobalKey<FormState>();
   final TextEditingController _emailController =
       TextEditingController();
@@ -72,10 +74,10 @@ class _AuthPageState extends State<AuthPage> {
                     widget.notifier.validateName(value);
                   },
                 )
-              : SizedBox(),
+              : const SizedBox.shrink(),
           widget.isRegisterPage
               ? const SizedBox(height: 10)
-              : SizedBox(),
+              : const SizedBox.shrink(),
           CustomTextFormField(
             controller: _passwordController,
             focusNode: _passwordFocus,
@@ -85,6 +87,15 @@ class _AuthPageState extends State<AuthPage> {
             errorText: widget.status.passwordError,
             onChanged: widget.notifier.validatePassword,
           ),
+          const SizedBox(height: 5),
+          widget.isRegisterPage
+              ? UserRoleSelector(
+                  selectedRole: widget.status.role,
+                  onChanged: (role) {
+                    widget.notifier.setUserRole(role);
+                  },
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     );

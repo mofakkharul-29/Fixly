@@ -5,8 +5,8 @@ import 'package:fixly/core/utils/custom_elevated_button.dart';
 import 'package:fixly/core/utils/log_reg_text.dart';
 import 'package:fixly/core/utils/login_option.dart';
 import 'package:fixly/features/auth/widget/body_container.dart';
-import 'package:fixly/features/provider/firebase_all_provider.dart';
 import 'package:fixly/features/provider/form_status_provider.dart';
+import 'package:fixly/features/provider/register_mode_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,8 +19,8 @@ class AuthenticationScreen extends ConsumerWidget {
     final formNotifier = ref.read(
       formStatusProvider.notifier,
     );
-    final authNotifier = ref.read(
-      authNotifierProvidr.notifier,
+    final isRegisterMode = ref.watch(
+      isRegisterModeProvider,
     );
 
     return Scaffold(
@@ -42,22 +42,47 @@ class AuthenticationScreen extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AuthPage(
-                    isRegisterPage: true,
+                    isRegisterPage: isRegisterMode,
                     notifier: formNotifier,
                     status: formStatus,
                   ),
                   LogRegText(
-                    firstText: 'don\'t have an account? ',
-                    lastText: 'Signup',
-                    onTap: () {},
+                    firstText: isRegisterMode
+                        ? 'Already have an account? '
+                        : 'Don\'t have an account? ',
+                    lastText: isRegisterMode
+                        ? 'Login'
+                        : 'Sign up',
+                    onTap: () {
+                      final current = ref.read(
+                        isRegisterModeProvider,
+                      );
+                      ref
+                              .read(
+                                isRegisterModeProvider
+                                    .notifier,
+                              )
+                              .state =
+                          !current;
+                    },
                   ),
                   const SizedBox(height: 10),
                   CustomElevatedButton(
                     buttonTextColor: AppColor
                         .kLogRegButtonForegroundColor,
-                    onPressed: () async {},
-                    text: 'login',
-                    icon: Icons.login_rounded,
+                    isSubmitting: formStatus.isSubmitting,
+
+                    onPressed: () async {
+                      await formNotifier.onSubmit(
+                        isSiginingIn: !isRegisterMode,
+                      );
+                    },
+                    text: isRegisterMode
+                        ? 'Sign up'
+                        : 'Login',
+                    icon: isRegisterMode
+                        ? Icons.person_add
+                        : Icons.login_rounded,
                     iconSize: 20,
                     iconColor: AppColor
                         .kLogRegButtonForegroundColor,

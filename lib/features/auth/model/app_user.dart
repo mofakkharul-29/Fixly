@@ -55,10 +55,10 @@ class AppUser {
     return {
       'uid': uid,
       'email': email,
-      'role': role,
+      'role': role.name,
       'name': name,
       'photoUrl': photoUrl,
-      'createdAt': createdAt,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 }

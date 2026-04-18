@@ -5,6 +5,7 @@ import 'package:fixly/features/auth/model/repository/auth_repo.dart';
 import 'package:fixly/features/auth/widget/read_write_to_firestore.dart';
 import 'package:fixly/features/auth/widget/user_role.dart';
 import 'package:fixly/features/provider/firebase_all_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -26,11 +27,14 @@ class FirebaseRepo implements AuthRepo {
     UserRole role,
   ) async {
     try {
+      debugPrint('firebase register started ===');
+
       final UserCredential credential = await _auth
           .createUserWithEmailAndPassword(
             email: email,
             password: password,
           );
+
       final User? firebaseUser = credential.user;
       if (firebaseUser == null) return null;
 

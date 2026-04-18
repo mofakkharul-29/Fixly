@@ -34,6 +34,7 @@ class LogRegFormState {
     Object? nameError = _noChange,
     bool? isFormValid,
     bool? isSubmitting,
+    UserRole? role,
   }) {
     return LogRegFormState(
       email: email ?? this.email,
@@ -50,6 +51,7 @@ class LogRegFormState {
           : nameError as String?,
       isFormValid: isFormValid ?? this.isFormValid,
       isSubmitting: isSubmitting ?? this.isSubmitting,
+      role: role ?? this.role,
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:fixly/features/auth/model/repository/form_state.dart';
+import 'package:fixly/features/auth/widget/user_role.dart';
 import 'package:fixly/features/provider/firebase_all_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -77,7 +78,7 @@ class LgoRegFormNotifier extends Notifier<LogRegFormState> {
     return null;
   }
 
-  bool? _isFormValid({
+  bool _isFormValid({
     required String? emailError,
     required String? passwordError,
   }) {
@@ -88,20 +89,37 @@ class LgoRegFormNotifier extends Notifier<LogRegFormState> {
     state = state.copyWith(isSubmitting: value);
   }
 
-  void onSubmit() {
+  Future<void> onSubmit({bool isSiginingIn = true}) async {
     final valid = _isFormValid(
       emailError: state.emailError,
       passwordError: state.passwordError,
     );
-    if (valid == null) {
-      ref
-          .read(authNotifierProvidr.notifier)
-          .registerWithEmailPassword(
-            state.email,
-            state.password,
-            state.name ?? 'no name',
-            state.role,
-          );
+    if (!valid) return;
+    setSubmitting(true);
+    try {
+      final authNotifier = ref.read(
+        authNotifierProvidr.notifier,
+      );
+
+      if (isSiginingIn) {
+        await authNotifier.loginWithEmailPassword(
+          state.email,
+          state.password,
+        );
+      } else {
+        await authNotifier.registerWithEmailPassword(
+          state.email,
+          state.password,
+          state.name ?? 'no name',
+          state.role,
+        );
+      }
+    } finally {
+      setSubmitting(false);
     }
+  }
+
+  void setUserRole(UserRole role) {
+    state = state.copyWith(role: role);
   }
 }
