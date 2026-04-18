@@ -1,3 +1,5 @@
+import 'package:fixly/features/auth/widget/user_role.dart';
+
 class LogRegFormState {
   final String email;
   final String password;
@@ -9,6 +11,7 @@ class LogRegFormState {
 
   final bool isFormValid;
   final bool isSubmitting;
+  final UserRole role;
 
   const LogRegFormState({
     this.email = '',
@@ -19,6 +22,7 @@ class LogRegFormState {
     this.nameError,
     this.isFormValid = false,
     this.isSubmitting = false,
+    this.role = UserRole.consumer,
   });
 
   LogRegFormState copyWith({

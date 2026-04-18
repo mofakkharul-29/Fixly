@@ -5,13 +5,24 @@ import 'package:fixly/core/utils/custom_elevated_button.dart';
 import 'package:fixly/core/utils/log_reg_text.dart';
 import 'package:fixly/core/utils/login_option.dart';
 import 'package:fixly/features/auth/widget/body_container.dart';
+import 'package:fixly/features/provider/firebase_all_provider.dart';
+import 'package:fixly/features/provider/form_status_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthenticationScreen extends StatelessWidget {
+class AuthenticationScreen extends ConsumerWidget {
   const AuthenticationScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formStatus = ref.watch(formStatusProvider);
+    final formNotifier = ref.read(
+      formStatusProvider.notifier,
+    );
+    final authNotifier = ref.read(
+      authNotifierProvidr.notifier,
+    );
+
     return Scaffold(
       body: BodyContainer(
         child: SafeArea(
@@ -30,7 +41,11 @@ class AuthenticationScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const AuthPage(isRegisterPage: false),
+                  AuthPage(
+                    isRegisterPage: true,
+                    notifier: formNotifier,
+                    status: formStatus,
+                  ),
                   LogRegText(
                     firstText: 'don\'t have an account? ',
                     lastText: 'Signup',
@@ -40,7 +55,7 @@ class AuthenticationScreen extends StatelessWidget {
                   CustomElevatedButton(
                     buttonTextColor: AppColor
                         .kLogRegButtonForegroundColor,
-                    onPressed: () {},
+                    onPressed: () async {},
                     text: 'login',
                     icon: Icons.login_rounded,
                     iconSize: 20,
