@@ -1,11 +1,9 @@
 import 'package:fixly/core/theme/app_color.dart';
-import 'package:fixly/core/utils/auth_page.dart';
 import 'package:fixly/core/utils/custom_divider.dart';
 import 'package:fixly/core/utils/custom_elevated_button.dart';
 import 'package:fixly/core/utils/log_reg_text.dart';
 import 'package:fixly/core/utils/login_option.dart';
 import 'package:fixly/features/auth/widget/body_container.dart';
-import 'package:fixly/features/provider/form_status_provider.dart';
 import 'package:fixly/features/provider/register_mode_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,10 +13,6 @@ class AuthenticationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formStatus = ref.watch(formStatusProvider);
-    final formNotifier = ref.read(
-      formStatusProvider.notifier,
-    );
     final isRegisterMode = ref.watch(
       isRegisterModeProvider,
     );
@@ -41,11 +35,6 @@ class AuthenticationScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AuthPage(
-                    isRegisterPage: isRegisterMode,
-                    notifier: formNotifier,
-                    status: formStatus,
-                  ),
                   LogRegText(
                     firstText: isRegisterMode
                         ? 'Already have an account? '
@@ -70,13 +59,8 @@ class AuthenticationScreen extends ConsumerWidget {
                   CustomElevatedButton(
                     buttonTextColor: AppColor
                         .kLogRegButtonForegroundColor,
-                    isSubmitting: formStatus.isSubmitting,
 
-                    onPressed: () async {
-                      await formNotifier.onSubmit(
-                        isSiginingIn: !isRegisterMode,
-                      );
-                    },
+                    onPressed: () async {},
                     text: isRegisterMode
                         ? 'Sign up'
                         : 'Login',
