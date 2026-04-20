@@ -1,8 +1,8 @@
 import 'package:fixly/core/utils/auth_form.dart';
 import 'package:fixly/core/utils/custom_divider.dart';
 import 'package:fixly/core/utils/log_reg_text.dart';
-import 'package:fixly/features/auth/data/form_notifier.dart';
-import 'package:fixly/features/auth/model/form_state.dart';
+import 'package:fixly/features/auth/model/repository/form_notifier.dart';
+import 'package:fixly/features/auth/model/repository/form_state.dart';
 import 'package:fixly/features/auth/widget/body_container.dart';
 import 'package:fixly/features/auth/widget/get_login_optiond.dart';
 import 'package:fixly/features/auth/widget/user_role.dart';

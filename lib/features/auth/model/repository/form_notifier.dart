@@ -1,4 +1,4 @@
-import 'package:fixly/features/auth/model/form_state.dart';
+import 'package:fixly/features/auth/model/repository/form_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LogRegFormNotifier extends Notifier<LogRegFormState> {
