@@ -1,20 +1,72 @@
-import 'package:fixly/core/theme/app_color.dart';
+import 'package:fixly/core/utils/auth_form.dart';
 import 'package:fixly/core/utils/custom_divider.dart';
-import 'package:fixly/core/utils/custom_elevated_button.dart';
 import 'package:fixly/core/utils/log_reg_text.dart';
-import 'package:fixly/core/utils/login_option.dart';
+import 'package:fixly/features/auth/data/form_notifier.dart';
+import 'package:fixly/features/auth/model/form_state.dart';
 import 'package:fixly/features/auth/widget/body_container.dart';
-import 'package:fixly/features/provider/register_mode_provider.dart';
+import 'package:fixly/features/auth/widget/get_login_optiond.dart';
+import 'package:fixly/features/auth/widget/user_role.dart';
+import 'package:fixly/features/provider/auth_mode_provider.dart';
+import 'package:fixly/features/provider/form_status.dart';
+import 'package:fixly/features/provider/user_role_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthenticationScreen extends ConsumerWidget {
+class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isRegisterMode = ref.watch(
-      isRegisterModeProvider,
+  ConsumerState<AuthenticationScreen> createState() =>
+      _AuthenticationScreenState();
+}
+
+class _AuthenticationScreenState
+    extends ConsumerState<AuthenticationScreen> {
+  final GlobalKey<FormState> formKey =
+      GlobalKey<FormState>();
+
+  final TextEditingController _emailController =
+      TextEditingController();
+  final TextEditingController _passwordController =
+      TextEditingController();
+  final TextEditingController _nameController =
+      TextEditingController();
+
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _nameFocus = FocusNode();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    _nameFocus.dispose();
+  }
+
+  void _resetControllers() {
+    _emailController.clear();
+    _passwordController.clear();
+    _nameController.clear();
+  }
+
+  void onRoleChange(UserRole value) {
+    debugPrint('recent user role: ${value.name}');
+    ref.read(userRoleProvider.notifier).state = value;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AuthMode authMode = ref.watch(authModeProvider);
+    final UserRole userRole = ref.watch(userRoleProvider);
+    final LogRegFormState formStatus = ref.watch(
+      formStatusProvider,
+    );
+    final LogRegFormNotifier formNotifier = ref.read(
+      formStatusProvider.notifier,
     );
 
     return Scaffold(
@@ -35,71 +87,45 @@ class AuthenticationScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  AuthForm(
+                    formKey: formKey,
+                    emailController: _emailController,
+                    passwordController: _passwordController,
+                    nameController: _nameController,
+                    emailFocus: _emailFocus,
+                    passwordFocus: _passwordFocus,
+                    nameFocus: _nameFocus,
+                    mode: authMode,
+                    userRole: userRole,
+                    onChanged: onRoleChange,
+                    status: formStatus,
+                    notifier: formNotifier,
+                    authMode: authMode,
+                  ),
                   LogRegText(
-                    firstText: isRegisterMode
-                        ? 'Already have an account? '
-                        : 'Don\'t have an account? ',
-                    lastText: isRegisterMode
+                    firstText: authMode == AuthMode.login
+                        ? 'Don\'t have an account? '
+                        : 'Already have an account? ',
+                    lastText: authMode == AuthMode.register
                         ? 'Login'
                         : 'Sign up',
                     onTap: () {
-                      final current = ref.read(
-                        isRegisterModeProvider,
-                      );
+                      _resetControllers();
+                      formNotifier.resetForm();
                       ref
                               .read(
-                                isRegisterModeProvider
-                                    .notifier,
+                                authModeProvider.notifier,
                               )
                               .state =
-                          !current;
+                          authMode == AuthMode.login
+                          ? AuthMode.register
+                          : AuthMode.login;
                     },
-                  ),
-                  const SizedBox(height: 10),
-                  CustomElevatedButton(
-                    buttonTextColor: AppColor
-                        .kLogRegButtonForegroundColor,
-
-                    onPressed: () async {},
-                    text: isRegisterMode
-                        ? 'Sign up'
-                        : 'Login',
-                    icon: isRegisterMode
-                        ? Icons.person_add
-                        : Icons.login_rounded,
-                    iconSize: 20,
-                    iconColor: AppColor
-                        .kLogRegButtonForegroundColor,
-                    backgroundColor:
-                        AppColor.kLoginButtonBgColor,
-                    foregroundColor: AppColor.kTextPrimary,
-                    height: 50,
-                    width: MediaQuery.of(
-                      context,
-                    ).size.width,
                   ),
                   const SizedBox(height: 15),
                   const CustomDivider(),
                   const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      LoginOption(
-                        onPressed: () {},
-                        image: 'assets/images/google.png',
-                      ),
-                      LoginOption(
-                        onPressed: () {},
-                        image: 'assets/images/facebook.png',
-                      ),
-                      LoginOption(
-                        onPressed: () {},
-                        image: 'assets/images/phone.png',
-                      ),
-                    ],
-                  ),
+                  const GetLoginOptiond(),
                 ],
               ),
             ),
