@@ -23,7 +23,9 @@ class AppUser {
       uid: json['uid'] as String,
       email: json['email'] as String,
       name: json['name'] as String,
-      role: json['role'] as UserRole,
+      role: UserRole.values.firstWhere(
+        (e) => e.name == json['role'],
+      ),
       photoUrl: json['photoUrl'],
       createdAt: json['createdAt'] is Timestamp
           ? (json['createdAt'] as Timestamp).toDate()
@@ -55,7 +57,7 @@ class AppUser {
       'email': email,
       'name': name,
       'photoUrl': photoUrl,
-      'role': role,
+      'role': role.name,
       'createdAt': createdAt,
     };
   }
