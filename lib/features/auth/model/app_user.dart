@@ -58,7 +58,7 @@ class AppUser {
       'name': name,
       'photoUrl': photoUrl,
       'role': role.name,
-      'createdAt': createdAt,
+      'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 }

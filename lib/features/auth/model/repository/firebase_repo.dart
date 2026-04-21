@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fixly/core/utils/app_firebase_exception.dart';
+import 'package:fixly/core/utils/auth_exception.dart';
 import 'package:fixly/features/auth/model/app_user.dart';
 import 'package:fixly/features/auth/model/repository/auth_repo.dart';
 import 'package:fixly/features/auth/widget/user_role.dart';
 import 'package:fixly/features/provider/firebase_provider.dart';
 import 'package:fixly/features/provider/firestore_read_write_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseRepo implements AuthRepo {
   final Ref _ref;
@@ -55,15 +57,93 @@ class FirebaseRepo implements AuthRepo {
   Future<AppUser?> loginWithEmailPassword(
     String email,
     String password,
-  ) {
-    // TODO: implement loginWithEmailPassword
-    throw UnimplementedError();
+  ) async {
+    try {
+      final FirebaseAuth auth = _ref.read(
+        authInstanceProvider,
+      );
+      final UserCredential credential = await auth
+          .signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+      final User? firebaseUser = credential.user;
+      if (firebaseUser == null) {
+        throw const AuthException(
+          code: 'null-user',
+          message: 'Login failed. Please try again',
+        );
+      }
+
+      final appUser = await _ref
+          .read(firestoreServiceProvider)
+          .watchUserFromFirestore(firebaseUser.uid)
+          .first;
+      return appUser;
+    } on FirebaseAuthException catch (e) {
+      throw AppFirebaseException.fromFirebaseAuth(e);
+    }
   }
 
   @override
-  Future<AppUser?> loginWithGoogle() {
-    // TODO: implement loginWithGoogle
-    throw UnimplementedError();
+  Future<AppUser?> loginWithGoogle() async {
+    final GoogleSignIn googleService = _ref.read(
+      googleServiceProvider,
+    );
+    final FirebaseAuth auth = _ref.read(
+      authInstanceProvider,
+    );
+
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleService.signIn();
+
+      if (googleSignInAccount == null) {
+        throw AuthException(
+          code: 'not-selected',
+          message: 'No account selected',
+        );
+      }
+      final GoogleSignInAuthentication authentication =
+          await googleSignInAccount.authentication;
+
+      final OAuthCredential oAuthCredential =
+          GoogleAuthProvider.credential(
+            accessToken: authentication.accessToken,
+            idToken: authentication.idToken,
+          );
+      final UserCredential credential = await auth
+          .signInWithCredential(oAuthCredential);
+      final User? firebaseUser = credential.user;
+      if (firebaseUser == null) return null;
+
+      final existingUser = await _ref
+          .read(firestoreServiceProvider)
+          .watchUserFromFirestore(firebaseUser.uid)
+          .first;
+
+      if (existingUser != null) {
+        return existingUser;
+      }
+
+      final AppUser appUser = AppUser(
+        uid: firebaseUser.uid,
+        email: firebaseUser.email ?? '',
+        name: firebaseUser.displayName ?? 'unknown',
+        role: UserRole
+            .consumer, // later this will be set as dynamic not hardcoded
+        photoUrl: firebaseUser.photoURL,
+        createdAt:
+            firebaseUser.metadata.creationTime ??
+            DateTime.now(),
+      );
+      await _ref
+          .read(firestoreServiceProvider)
+          .writeToFirestore(appUser);
+      return appUser;
+    } on FirebaseAuthException catch (e) {
+      throw AppFirebaseException.fromFirebaseAuth(e);
+    }
   }
 
   @override
