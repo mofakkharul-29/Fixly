@@ -29,4 +29,8 @@ class ReadWriteFirestore {
           return AppUser.fromMap(snapshot.data()!);
         });
   }
+
+  Future<void> deleteUser(String uid) async {
+    await _firestore.collection('users').doc(uid).delete();
+  }
 }
