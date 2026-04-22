@@ -176,7 +176,7 @@ class FirebaseRepo implements AuthRepo {
     try {
       final providerId = user.providerData.first.providerId;
       if (providerId == 'password') {
-        if (password == null) {
+        if (password == null) { 
           throw Exception(
             'Password required for re-authentication',
           );
