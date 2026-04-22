@@ -1,5 +1,6 @@
 import 'package:fixly/core/theme/app_color.dart';
 import 'package:fixly/core/utils/custom_text_format.dart';
+import 'package:fixly/features/provider/splash_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -137,7 +138,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       _loadApp(),
     ]);
     if (!mounted) return;
-    debugPrint('Animation is completed in : ');
+    ref.read(splashStatus.notifier).state = true;
   }
 
   @override
