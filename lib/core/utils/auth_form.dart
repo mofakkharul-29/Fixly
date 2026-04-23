@@ -2,11 +2,13 @@ import 'package:fixly/core/theme/app_color.dart';
 import 'package:fixly/core/utils/custom_elevated_button.dart';
 import 'package:fixly/core/utils/custom_text_field.dart';
 import 'package:fixly/core/utils/user_role.dart';
+import 'package:fixly/features/auth/model/app_user.dart';
 import 'package:fixly/features/auth/model/repository/form_notifier.dart';
 import 'package:fixly/features/auth/model/repository/form_state.dart';
 import 'package:fixly/features/auth/widget/user_role.dart';
 import 'package:fixly/features/provider/auth_mode_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -22,6 +24,7 @@ class AuthForm extends StatelessWidget {
   final LogRegFormState status;
   final LogRegFormNotifier notifier;
   final AuthMode authMode;
+  final AsyncValue<AppUser?> authAction;
 
   const AuthForm({
     super.key,
@@ -38,6 +41,7 @@ class AuthForm extends StatelessWidget {
     required this.status,
     required this.notifier,
     required this.authMode,
+    required this.authAction,
   });
 
   @override

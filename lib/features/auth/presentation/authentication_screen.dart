@@ -6,6 +6,7 @@ import 'package:fixly/features/auth/model/repository/form_state.dart';
 import 'package:fixly/features/auth/widget/body_container.dart';
 import 'package:fixly/features/auth/widget/get_login_optiond.dart';
 import 'package:fixly/features/auth/widget/user_role.dart';
+import 'package:fixly/features/provider/auth_action_provider.dart';
 import 'package:fixly/features/provider/auth_mode_provider.dart';
 import 'package:fixly/features/provider/form_status.dart';
 import 'package:fixly/features/provider/user_role_provider.dart';
@@ -68,6 +69,7 @@ class _AuthenticationScreenState
     final LogRegFormNotifier formNotifier = ref.read(
       formStatusProvider.notifier,
     );
+    final authNotifier = ref.watch(authNotiferProvider);
 
     return Scaffold(
       body: BodyContainer(
@@ -101,6 +103,7 @@ class _AuthenticationScreenState
                     status: formStatus,
                     notifier: formNotifier,
                     authMode: authMode,
+                    authAction: authNotifier,
                   ),
                   LogRegText(
                     firstText: authMode == AuthMode.login
