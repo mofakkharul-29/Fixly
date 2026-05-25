@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "30168332260",
+    "project_id": "fixly-1bdc5",
+    "storage_bucket": "fixly-1bdc5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30168332260:android:b8a7b723f06d505cb2f9f1",
+        "android_client_info": {
+          "package_name": "com.example.fixly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "30168332260-b3jvrs4njmcmk1m5sp5tajf91e98ek4b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fixly",
+            "certificate_hash": "699d4c22d4e851e0e34006a058e959333af1c56f"
+          }
+        },
+        {
+          "client_id": "30168332260-jghlekao15g7oogv08nka2588q4f7435.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjvmvf9_hgpoUHjoDqYY1uESxhIwQSwWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "30168332260-jghlekao15g7oogv08nka2588q4f7435.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
