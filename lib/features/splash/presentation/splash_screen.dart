@@ -23,6 +23,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   void initState() {
+    super.initState();
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
     _controller = AnimationController(
@@ -59,15 +61,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           ),
         );
 
-    _controller.forward();
-
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         SplashHelper.onAnimationComplete(context: context, ref: ref);
       }
     });
 
-    super.initState();
+    _controller.forward();
   }
 
   @override
