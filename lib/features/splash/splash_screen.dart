@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: AppContainer(
-        color: Colors.grey,
+        color: const Color(0xFF9E9E9E),
         alignment: Alignment.center,
         gradient: const LinearGradient(
           colors: [Color(0xFF37474F), Color(0xFF546E7A), Color(0xFF677F8B)],
@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen>
             SizedBox(height: AppScale.dp(15)),
             AppText(
               text: 'Fixly',
-              color: const Color.fromRGBO(0, 0, 0, 0.867),
+              color: const Color(0xDD000000),
               fontFamily: 'Poppins',
               fontSize: AppScale.sp(28),
               fontWeight: FontWeight.w700,
