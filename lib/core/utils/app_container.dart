@@ -13,6 +13,7 @@ class AppContainer extends StatelessWidget {
   final BoxShape shape;
   final double? height;
   final double? width;
+  final Gradient? gradient;
   final Widget? child;
   const AppContainer({
     super.key,
@@ -29,6 +30,7 @@ class AppContainer extends StatelessWidget {
     this.height,
     this.width,
     this.child,
+    this.gradient,
   });
 
   @override
@@ -42,6 +44,7 @@ class AppContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         image: image,
+        gradient: gradient,
         border: BoxBorder.all(
           color: bdrColor,
           width: bdrWidth,
